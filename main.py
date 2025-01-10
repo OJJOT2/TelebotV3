@@ -5,7 +5,22 @@ import time
 from datetime import datetime
 import threading
 import pytz
+from flask import Flask, request
+################################ webhooks#######3
+app = Flask(__name__)
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    json_str = request.get_data().decode('UTF-8')
+    update = telebot.types.Update.de_json(json_str)
+    bot.process_new_updates([update])
+    return '!', 200
+
+if __name__ == '__main__':
+    bot.remove_webhook()
+    bot.set_webhook(url='YOUR_WEBHOOK_URL')
+    app.run(port=5000)
+    ###############################
 TOKEN = "7577429699:AAFDna2WDWzLRhQehvVUyjVqIwyPd7-Ix7A"
 bot = telebot.TeleBot(TOKEN)
 conn = http.client.HTTPSConnection("udemy-paid-courses-for-free-api.p.rapidapi.com")
